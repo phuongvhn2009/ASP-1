@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/css/site1.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            cities
+        </header>
+
+        <div class="main">
+            <div class="nav-left">
+               <a href="/home/london">London</a>
+               <a href="/home/paris">Paris</a>
+               <a href="/home/tokyo">Tokyo</a>
+            </div>
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+        <footer>
+            footer
+            @RenderSection("tacgia", required: false)
+        </footer>
+    </div>
+</body>
+</html>

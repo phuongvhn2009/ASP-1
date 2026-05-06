@@ -1,0 +1,62 @@
+﻿@model List<Lab01_ASP.Models.model>
+
+<style>
+    .heading {
+        text-align: center;
+        color: orange;
+        margin: 20px 0;
+    }
+
+    .subject-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .subject {
+        border: 1px solid #eee;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+
+        .subject img {
+            width: 100%;
+            height: 150px;
+        }
+
+        .subject h5 {
+            color: #333;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+</style>
+
+<h2 class="heading">CÔNG NGHỆ THÔNG TIN</h2>
+<hr />
+
+<div class="subject-group">
+
+    <div class="subject">
+        <img src="@Model[0].Image" />
+        <h5>@Model[0].SubName</h5>
+    </div>
+
+
+    <div class="subject">
+        <img src="@Model[1].Image" />
+        <h5>@Model[1].SubName</h5>
+    </div>
+
+
+    <div class="subject">
+        <img src="@Model[2].Image" />
+        <h5>@Model[2].SubName</h5>
+    </div>
+
+
+    <div class="subject">
+        <img src="@Model[3].Image" />
+        <h5>@Model[3].SubName</h5>
+    </div>
+</div>

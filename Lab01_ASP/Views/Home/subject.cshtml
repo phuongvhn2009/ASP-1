@@ -1,0 +1,46 @@
+﻿@model List<Lab01_ASP.Models.model2>
+
+@{
+    // Dòng này cực kỳ quan trọng: Vô hiệu hóa Layout
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Danh sách ngành học</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    
+    <style>
+        .heading { text-align: center; color: orange; margin: 20px 0; text-transform: uppercase; }
+        .subject-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 20px; }
+        .subject { border: 1px solid #eee; padding: 15px; text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); border-radius: 8px; }
+        .subject img { width: 100%; height: 160px; object-fit: cover; }
+        .subject h5 { color: #333; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <h2 class="heading">CÁC CHUYÊN NGÀNH ĐÀO TẠO</h2>
+    <hr />
+
+    <div class="subject-group">
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <div class="subject">
+                    <img src="@item.Image" alt="@item.SubName" />
+                    <h5>@item.SubName</h5>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Đang tải dữ liệu...</p>
+        }
+    </div>
+
+</body>
+</html>

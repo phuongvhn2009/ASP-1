@@ -1,0 +1,199 @@
+@model IEnumerable<Lab01_Bai3_ASP.Models.ProductViewModel> @ {
+    ViewData ["Title"] = "Lab01 - Bài 3";
+}
+
+<!-- Link FontAwesome cho icon sao, nếu chưa có -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" / >
+
+<style >
+/* Reset cơ bản và font */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Màu nền nhẹ để làm nổi bật card sản phẩm */
+    margin: 0;
+    padding: 0;
+}
+
+/* Container bao quanh grid */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* Grid hệ thống */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cột như trong hình của bạn */
+    gap: 20px; /* Khoảng cách giữa các card */
+    justify-items: center; /* Căn giữa các card trong cột của chúng */
+    align-items: stretch; /* Đảm bảo card cao bằng nhau */
+}
+
+/* Thẻ sản phẩm (Card) - Đây là phần chính tạo hiệu ứng "cân" */
+.product-card {
+    background-color: white;
+    border: 1px solid #eee; /* Viền rất mờ để phân chia */
+    border-radius: 8px; /* Bo góc nhẹ */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Bóng đổ rất nhẹ để tạo chiều sâu */
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa tất cả nội dung bên trong */
+    text-align: center; /* Căn giữa text cho các thẻ không dùng flex */
+    max-width: 320px; /* Giới hạn chiều rộng tối đa cho gọn gàng */
+    width: 100%;
+    height: 100%; /* Đảm bảo card cao hết cỡ nếu dung grid stretch */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+}
+
+/* Badge giảm giá */
+.discount-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    padding: 2px 10px;
+    font-size: 11px;
+    border-top-right-radius: 8px; /* Bo góc khớp với card */
+    border-bottom-left-radius: 8px;
+    font-weight: bold;
+}
+
+/* Hình ảnh */
+.product-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px; /* Giới hạn chiều cao ảnh để card đồng đều */
+    object-fit: contain; /* Đảm bảo ảnh không bị méo */
+    margin-bottom: 15px;
+}
+
+/* Tên sản phẩm */
+.product-name {
+    font-size: 16px; /* Giảm font-size so với mặc định h3 */
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+/* Giá trả góp mỗi tháng */
+.monthly-price {
+    font-size: 13px;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+    .monthly-price strong {
+        color: #d70018; /* Màu đỏ nổi bật cho giá */
+        font-size: 15px;
+    }
+
+/* Giá gốc */
+.original-price {
+    font-size: 12px;
+    color: #777; /* Màu mờ hơn giá tháng */
+    text-decoration: line-through; /* Gạch ngang */
+    margin: 0 0 10px 0;
+}
+
+/* Đánh giá sao */
+.rating {
+    font-size: 12px;
+    color: #f1c40f; /* Màu vàng cho sao */
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+    .rating span {
+        color: #555; /* Màu text đánh giá */
+    }
+
+/* Thông số kỹ thuật - Phần này được căn lề y hệt hình gốc */
+.specs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Đảm bảo specs rộng hết card */
+    border-top: 1px solid #f0f0f0; /* Gạch ngang mờ phân cách */
+    padding-top: 10px;
+    text-align: left; /* Căn lề trái cho thông số */
+    font-size: 11px;
+    color: #555;
+    flex-grow: 1; /* Cho phép specs chiếm khoảng không gian còn lại */
+}
+
+    .specs li {
+        margin-bottom: 4px;
+        display: flex; /* Dùng flex để dễ căn lề label và value */
+        align-items: baseline;
+    }
+
+        .specs li strong {
+            color: #333;
+            min-width: 70px; /* Chiều rộng tối thiểu cho nhãn để thẳng hàng */
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+/* Footer mặc định - Làm gọn lại */
+footer {
+    border-top: 1px solid #eaeaea;
+    margin-top: 40px;
+    padding: 15px 0;
+    color: #666;
+    background-color: white;
+    text-align: center;
+}
+
+    footer .container {
+        padding: 0;
+    }
+
+</style >
+
+<div class="container" >
+<div class="product-grid" >
+@foreach (var item in Model) {
+    <div class="product-card">
+    <!-- Badge giảm giá -->
+    <div class="discount-badge">Giảm @Html.DisplayFor(m => item.DiscountBadge)</div>
+    <!-- Hình ảnh -->
+    <img src="@item.ImagePath" alt="@item.Name" class="product-img" />
+    <!-- Tên sản phẩm -->
+    <h3 class="product-name">@item.Name</h3>
+    <!-- Giá trả góp -->
+    <p class="monthly-price"> Chỉ từ <strong>@Html.DisplayFor(m => item.MonthlyPrice)</strong>/ tháng </p>
+    <!-- Giá gốc -->
+    <p class="original-price">@Html.DisplayFor(m => item.OriginalPrice)</p>
+    <!-- Đánh giá -->
+    <div class="rating"> @for (int i = 0; i < item.StarRating; i++)
+
+{
+    <i class="fa fa-star"></i>
+}
+
+@if (item.StarRating % 1 != 0) {
+    <i class="fa fa-star-half-alt"></i>
+}
+
+<span > (@item.ReviewCount đánh giá)</span >
+</div >
+<!-- Thông số kỹ thuật -->
+<ul class="specs" >
+<li > <strong > @Html.DisplayNameFor(m => m.Screen):</strong > @item.Screen</li >
+<li > <strong > @Html.DisplayNameFor(m => m.Camera):</strong > @item.Camera</li >
+<li > <strong > @Html.DisplayNameFor(m => m.Battery):</strong > @item.Battery</li >
+<li > <strong > @Html.DisplayNameFor(m => m.Ram):</strong > @item.Ram</li >
+<li > <strong > @Html.DisplayNameFor(m => m.Cpu):</strong > @item.Cpu</li >
+<li > <strong > @Html.DisplayNameFor(m => m.Os):</strong > @item.Os</li >
+</ul >
+</div >
+}
+</div >
+</div >

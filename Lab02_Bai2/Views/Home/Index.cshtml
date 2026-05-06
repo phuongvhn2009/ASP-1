@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var stu = ViewData["Student"] as Lab02_Bai2.Models.Student;
+}
+
+<h1>
+    @ViewData["header"]
+</h1>
+<div>
+    studentid: @stu.StudentId
+</div>
+<div>
+    name: @stu.Name
+</div>
+<div>
+    brand: @stu.Brand
+</div>
+<div>
+    section: @stu.Section
+</div>

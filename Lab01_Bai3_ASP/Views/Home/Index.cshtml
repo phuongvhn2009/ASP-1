@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Lab01_Bai3_ASP.Models.ProductViewModel>
+
+<div class="container">
+    <div class="product-grid">
+        @foreach (var item in Model)
+        {
+            <div class="product-card">
+                <!-- Badge giảm giá -->
+                <div class="discount-badge">Giảm @Html.DisplayFor(m => item.DiscountBadge)</div>
+
+                <!-- Hình ảnh -->
+                <img src="@item.ImagePath" alt="@item.Name" class="product-img" />
+
+                <!-- Tên sản phẩm -->
+                <h3 class="product-name">@item.Name</h3>
+
+                <!-- Giá trả góp -->
+                <p class="monthly-price">
+                    Chỉ từ <strong>@Html.DisplayFor(m => item.MonthlyPrice)</strong>/ tháng
+                </p>
+
+                <!-- Giá gốc -->
+                <p class="original-price">@Html.DisplayFor(m => item.OriginalPrice)</p>
+
+                <!-- Đánh giá sao (Tạm thời dùng text hoặc icon) -->
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐ (@item.ReviewCount đánh giá)</span>
+                </div>
+
+                <!-- Thông số kỹ thuật -->
+                <ul class="specs">
+                    <li><strong>@Html.DisplayNameFor(m => m.Screen):</strong> @item.Screen</li>
+                    <li><strong>@Html.DisplayNameFor(m => m.Camera):</strong> @item.Camera</li>
+                    <li><strong>@Html.DisplayNameFor(m => m.Battery):</strong> @item.Battery</li>
+                    <li><strong>@Html.DisplayNameFor(m => m.Ram):</strong> @item.Ram</li>
+                    <li><strong>@Html.DisplayNameFor(m => m.Cpu):</strong> @item.Cpu</li>
+                    <li><strong>@Html.DisplayNameFor(m => m.Os):</strong> @item.Os</li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>

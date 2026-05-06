@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="demoo/Lab02_Bai1.csproj" Id="b967c7b7-65db-465d-9d27-6d83c4d9e5f2" />
+  <Project Path="Lab01_ASP/Lab01_ASP.csproj" Id="50fe6d58-33f6-403b-b6c2-dff7afb69c3f" />
+  <Project Path="Lab01_Bai3_ASP/Lab01_Bai3_ASP.csproj" Id="5067d81c-096a-4494-a85d-b6178960585a" />
+  <Project Path="Lab02_Bai2/Lab02_Bai2.csproj" Id="f368dce5-40a2-4f49-a318-d421832c4cba" />
+</Solution>
