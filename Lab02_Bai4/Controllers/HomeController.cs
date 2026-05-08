@@ -17,7 +17,11 @@ namespace Lab02_Bai4.Controllers
         {
             return View();
         }
-
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
         public IActionResult Create(Product product)
         {
            products.Add(product);
