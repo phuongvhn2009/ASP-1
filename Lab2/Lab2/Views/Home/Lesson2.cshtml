@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var student = ViewData["student"] as Lab2.Models.Lesson2;
+}
+<h1>@ViewData["Header"]</h1>
+<div>student Id : @student.ID</div>
+<div>student Name : @student.Name</div>
+<div>student Branch : @student.Branch</div>
+<div>student Section  : @student.Section</div>

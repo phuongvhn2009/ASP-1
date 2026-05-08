@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Lesson 3";
+}
+
+<link rel="stylesheet" href="~/css/lesson3.css" asp-append-version="true" />
+
+<h3 class="employee-title">Employee Fpoly Education Data</h3>
+
+<table class="employee-table">
+    <thead>
+        <tr>
+            <th>Serial No</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in ViewBag.lesson3)
+        {
+            <tr>
+                <td>@item.EmployeeId</td>
+                <td>@item.EmployeeName</td>
+                <td>@item.Address</td>
+                <td>@item.Phone</td>
+            </tr>
+        }
+    </tbody>
+</table>

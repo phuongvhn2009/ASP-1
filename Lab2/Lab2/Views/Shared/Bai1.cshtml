@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/bai1.css" asp-append-version="true" />
+}
+
+<div class="bai1-container">
+    <div class="header">Header</div>
+
+    <div class="main">
+        <div class="nav-left">
+            <a asp-controller="Home" asp-action="London">London</a>
+            <a asp-controller="Home" asp-action="Paris">Paris</a>
+            <a asp-controller="Home" asp-action="Tokyo">Tokyo</a>
+        </div>
+
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <div class="footer-bai1">Footer</div>
+</div>
