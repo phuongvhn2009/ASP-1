@@ -1,1 +1,26 @@
-﻿
+﻿@model Product
+@{
+    ViewData["Title"] = "Cập nhật sản phẩm";
+}
+<h1>Cập nhật sản phẩm</h1>
+<form asp-action="Update" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Tên sản phẩm</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Mô tả</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Giá</label>
+        <input asp-for="Price" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </div>
+</form>

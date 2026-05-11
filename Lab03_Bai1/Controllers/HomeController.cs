@@ -17,11 +17,31 @@ namespace Lab03_Bai1.Controllers
         {
             return View(Products);
         }
-        public IActionResult Edit()
+        // Hiển thị form chỉnh sửa sản phẩm
+        public IActionResult Edit(int id)
         {
-            return View();
+            var product = Products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
         }
-
+        // Xử lý POST request để cập nhật thông tin sản phẩm
+        [HttpPost]
+        public IActionResult Update([FromForm] Product updatedProduct)
+        {
+            var product = Products.FirstOrDefault(p => p.Id == updatedProduct.Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            // Cập nhật thông tin sản phẩm
+            product.Name = updatedProduct.Name;
+            product.Description = updatedProduct.Description;
+            product.Price = updatedProduct.Price;
+            return RedirectToAction("Index");
+        }
         public IActionResult Privacy()
         {
             return View();
