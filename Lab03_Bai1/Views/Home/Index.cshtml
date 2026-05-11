@@ -1,0 +1,29 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>danh sach san pham</h1>
+
+ <table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>ten san pham</th>
+            <th>mo ta</th>
+            <th>gia</th>
+            <th>chuc nang</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Price.ToString("N0")</td>
+                <td><a asp-action="Edit" asp-route-id="@item.Id">cap nhat</a></td>
+            </tr>
+        }
+    </tbody>
