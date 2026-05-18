@@ -12,26 +12,29 @@ namespace Lab03_Bai2.Controllers
         }
         public IActionResult Search([FromQuery] ProductSearchModel search)
         {
+            // Validate ràng buộc logic liên trường
+            if (search.MinPrice.HasValue && search.MaxPrice.HasValue
+                && search.MaxPrice < search.MinPrice)
+            {
+                ModelState.AddModelError("MaxPrice",
+                    "Giá đến phải lớn hơn hoặc bằng Giá từ.");
+                ViewBag.Products = new List<Product>();
+                return View(search);
+            }
+
             var products = ProductSeeder.GetProducts().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search.Name))
-            {
                 products = products.Where(p =>
-                    p.Name.Contains(search.Name,
-                    StringComparison.OrdinalIgnoreCase));
-            }
+                    p.Name.Contains(search.Name.Trim(),          // ← thêm Trim()
+                        StringComparison.OrdinalIgnoreCase));
 
             if (search.MinPrice.HasValue)
-            {
-                products = products.Where(p =>
-                    p.Price >= search.MinPrice.Value);
-            }
+                products = products.Where(p => p.Price >= search.MinPrice.Value);
 
             if (search.MaxPrice.HasValue)
-            {
-                products = products.Where(p =>
-                    p.Price <= search.MaxPrice.Value);
-            }
+                products = products.Where(p => p.Price <= search.MaxPrice.Value);
+
             ViewBag.Products = products.ToList();
             return View(search);
         }

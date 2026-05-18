@@ -1,6 +1,396 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
-}
-<h1>@ViewData["Title"]</h1>
+﻿@* ============================================================
+   Phần 3: View với Bootstrap + hiệu ứng nổi bật (AI tạo nhanh)
+   AI Tool used: Claude (Anthropic)
+   Features:
+     - Form tìm kiếm có validation message
+     - Badge hiển thị số kết quả tìm được
+     - Highlight từ khóa tìm kiếm trong tên sản phẩm
+     - Row animation khi load kết quả
+     - Responsive table với hover effect
+     - Empty state khi không tìm thấy
+   ============================================================ *@
 
-<p>Use this page to detail your site's privacy policy.</p>
+@model Lab03_Bai2.Controllers.ProductSearchModel
+@{
+    ViewData["Title"] = "Tìm kiếm sản phẩm";
+    var products = ViewBag.Products as List<Lab03_Bai2.Controllers.Product> ?? new();
+    var totalFound = ViewBag.TotalFound as int? ?? 0;
+    var searchName = Model?.Name ?? "";
+    var hasSearched = !string.IsNullOrWhiteSpace(searchName)
+                       || Model?.MinPrice != null
+                       || Model?.MaxPrice != null;
+}
+
+@* ── Google Font ── *@
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    body { font-family: 'Be Vietnam Pro', sans-serif; background: #f4f6fb; }
+
+    /* ── Page Header ───────────────────────────────────────── */
+    .page-header {
+        background: linear-gradient(135deg, #1a1f5e 0%, #2d3561 50%, #1565c0 100%);
+        color: #fff;
+        padding: 2.5rem 0 2rem;
+        margin-bottom: 2rem;
+        border-radius: 0 0 1.5rem 1.5rem;
+        box-shadow: 0 4px 20px rgba(21,101,192,.35);
+    }
+    .page-header h2 {
+        font-weight: 700;
+        font-size: 1.8rem;
+        letter-spacing: -.5px;
+        margin: 0;
+    }
+    .page-header p { opacity: .75; margin: .3rem 0 0; font-size: .9rem; }
+
+    /* ── Search Card ────────────────────────────────────────── */
+    .search-card {
+        background: #fff;
+        border-radius: 1rem;
+        padding: 1.8rem 2rem;
+        box-shadow: 0 2px 16px rgba(0,0,0,.08);
+        margin-bottom: 2rem;
+    }
+    .search-card .form-label {
+        font-weight: 600;
+        font-size: .82rem;
+        color: #555;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        margin-bottom: .3rem;
+    }
+    .search-card .form-control {
+        border-radius: .6rem;
+        border: 1.5px solid #e0e4ef;
+        padding: .6rem 1rem;
+        font-size: .95rem;
+        transition: border-color .2s, box-shadow .2s;
+    }
+    .search-card .form-control:focus {
+        border-color: #1565c0;
+        box-shadow: 0 0 0 3px rgba(21,101,192,.12);
+    }
+    .btn-search {
+        background: linear-gradient(135deg, #1565c0, #1a237e);
+        color: #fff;
+        border: none;
+        border-radius: .6rem;
+        padding: .65rem 2rem;
+        font-weight: 600;
+        font-size: .95rem;
+        letter-spacing: .3px;
+        transition: transform .15s, box-shadow .15s;
+    }
+    .btn-search:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(21,101,192,.35);
+        color: #fff;
+    }
+    .btn-reset {
+        border-radius: .6rem;
+        padding: .65rem 1.4rem;
+        font-weight: 500;
+    }
+    .validation-error { color: #d32f2f; font-size: .82rem; margin-top: .25rem; }
+
+    /* ── Result Meta Bar ────────────────────────────────────── */
+    .result-meta {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: 1rem;
+    }
+    .result-meta .badge-count {
+        background: #1565c0;
+        color: #fff;
+        border-radius: 2rem;
+        padding: .35rem .9rem;
+        font-size: .85rem;
+        font-weight: 600;
+    }
+    .result-meta .result-label {
+        color: #666;
+        font-size: .9rem;
+    }
+    .keyword-tag {
+        background: #e3f2fd;
+        color: #1565c0;
+        border-radius: 1rem;
+        padding: .2rem .7rem;
+        font-size: .82rem;
+        font-weight: 600;
+    }
+
+    /* ── Product Table ──────────────────────────────────────── */
+    .product-table-wrapper {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 2px 16px rgba(0,0,0,.07);
+        overflow: hidden;
+    }
+    .product-table {
+        margin: 0;
+        font-size: .93rem;
+    }
+    .product-table thead th {
+        background: #1a1f5e;
+        color: #fff;
+        font-weight: 600;
+        font-size: .8rem;
+        text-transform: uppercase;
+        letter-spacing: .7px;
+        padding: 1rem 1.2rem;
+        border: none;
+    }
+    .product-table tbody tr {
+        border-bottom: 1px solid #f0f2f8;
+        transition: background .15s, transform .15s;
+        animation: fadeSlideIn .4s ease both;
+    }
+    .product-table tbody tr:hover {
+        background: #e8f0fe;
+        transform: scale(1.002);
+        box-shadow: 0 2px 8px rgba(21,101,192,.1);
+        position: relative;
+        z-index: 1;
+    }
+    .product-table td {
+        padding: .9rem 1.2rem;
+        vertical-align: middle;
+    }
+
+    /* ── ID Badge ────────────────────────────────────────────── */
+    .id-badge {
+        background: #e8eaf6;
+        color: #3949ab;
+        border-radius: .4rem;
+        padding: .15rem .55rem;
+        font-weight: 700;
+        font-size: .82rem;
+    }
+
+    /* ── Product Name ────────────────────────────────────────── */
+    .product-name { font-weight: 600; color: #1a1a2e; }
+    .product-name mark {
+        background: #fff176;
+        color: #b71c1c;
+        border-radius: .25rem;
+        padding: 0 .15rem;
+        font-weight: 700;
+    }
+
+    /* ── Description ─────────────────────────────────────────── */
+    .product-desc { color: #666; font-size: .87rem; }
+
+    /* ── Price ───────────────────────────────────────────────── */
+    .price-cell {
+        font-weight: 700;
+        color: #c62828;
+        white-space: nowrap;
+        font-size: .97rem;
+    }
+    .price-cell::before { content: "₫ "; font-size: .75rem; opacity: .7; }
+
+    /* ── Empty State ─────────────────────────────────────────── */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #999;
+    }
+    .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .empty-state h5 { font-weight: 600; color: #555; }
+
+    /* ── Animations ──────────────────────────────────────────── */
+    @@keyframes fadeSlideIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0);    }
+    }
+    /* Stagger mỗi row xuất hiện lệch nhau */
+    .product-table tbody tr:nth-child(1)  { animation-delay: .05s; }
+    .product-table tbody tr:nth-child(2)  { animation-delay: .10s; }
+    .product-table tbody tr:nth-child(3)  { animation-delay: .15s; }
+    .product-table tbody tr:nth-child(4)  { animation-delay: .20s; }
+    .product-table tbody tr:nth-child(5)  { animation-delay: .25s; }
+    .product-table tbody tr:nth-child(6)  { animation-delay: .30s; }
+    .product-table tbody tr:nth-child(7)  { animation-delay: .35s; }
+    .product-table tbody tr:nth-child(8)  { animation-delay: .40s; }
+
+    /* ── Validation summary ───────────────────────────────────── */
+    .validation-summary-errors ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .validation-summary-errors li::before { content: "⚠ "; }
+</style>
+
+@* ── Page Header ── *@
+<div class="page-header">
+    <div class="container">
+        <h2>🔍 Tìm kiếm sản phẩm</h2>
+        <p>Nhập từ khóa hoặc khoảng giá để lọc sản phẩm. Có thể để trống bất kỳ trường nào.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+
+    @* ── Search Form ── *@
+    <div class="search-card">
+        <form asp-action="Search" method="get" novalidate>
+
+            @* Validation summary *@
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger py-2 mb-3 validation-summary-errors" role="alert"
+                 style="display:@(ViewData.ModelState.IsValid ? "none" : "block")">
+            </div>
+
+            <div class="row g-3 align-items-end">
+                @* Tên sản phẩm *@
+                <div class="col-md-4">
+                    <label asp-for="Name" class="form-label">Tên sản phẩm</label>
+                    <input asp-for="Name"
+                           class="form-control"
+                           placeholder="Ví dụ: Laptop, iPhone…"
+                           autocomplete="off" />
+                    <span asp-validation-for="Name" class="validation-error"></span>
+                </div>
+
+                @* Giá từ *@
+                <div class="col-md-3">
+                    <label asp-for="MinPrice" class="form-label">Giá từ (VNĐ)</label>
+                    <input asp-for="MinPrice"
+                           type="number" min="0" step="100000"
+                           class="form-control"
+                           placeholder="Ví dụ: 1000000" />
+                    <span asp-validation-for="MinPrice" class="validation-error"></span>
+                </div>
+
+                @* Giá đến *@
+                <div class="col-md-3">
+                    <label asp-for="MaxPrice" class="form-label">Giá đến (VNĐ)</label>
+                    <input asp-for="MaxPrice"
+                           type="number" min="0" step="100000"
+                           class="form-control"
+                           placeholder="Ví dụ: 30000000" />
+                    <span asp-validation-for="MaxPrice" class="validation-error"></span>
+                </div>
+
+                @* Buttons *@
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-search flex-fill">
+                        <i class="bi bi-search me-1"></i> Tìm
+                    </button>
+                    <a asp-action="Search" class="btn btn-outline-secondary btn-reset" title="Xóa bộ lọc">
+                        ✕
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @* ── Result Meta Bar (chỉ hiện khi đã tìm kiếm) ── *@
+    @if (hasSearched)
+    {
+        <div class="result-meta">
+            <span class="badge-count">@totalFound kết quả</span>
+            <span class="result-label">
+                @if (totalFound > 0)
+                {
+                    <text>Tìm thấy sản phẩm</text>
+                }
+                else
+                {
+                    <text>Không tìm thấy sản phẩm phù hợp</text>
+                }
+            </span>
+            @if (!string.IsNullOrWhiteSpace(searchName))
+            {
+                <span class="keyword-tag">🔑 "@searchName"</span>
+            }
+            @if (Model?.MinPrice != null || Model?.MaxPrice != null)
+            {
+                <span class="keyword-tag">
+                    💰 @(Model.MinPrice?.ToString("N0") ?? "0") – @(Model.MaxPrice?.ToString("N0") ?? "∞") VNĐ
+                </span>
+            }
+        </div>
+    }
+
+    @* ── Product Table ── *@
+    @if (!hasSearched || products.Count > 0)
+    {
+        <div class="product-table-wrapper">
+            <table class="table product-table">
+                <thead>
+                    <tr>
+                        <th style="width:60px">#</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Mô tả</th>
+                        <th class="text-end" style="width:160px">Giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in products)
+                    {
+                        <tr>
+                            <td><span class="id-badge">@item.Id</span></td>
+                            <td>
+                                @* Highlight từ khóa trong tên sản phẩm *@
+                                @if (!string.IsNullOrWhiteSpace(searchName)
+                                     && item.Name.Contains(searchName, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    var idx = item.Name.IndexOf(searchName, StringComparison.OrdinalIgnoreCase);
+                                    var pre = item.Name[..idx];
+                                    var match = item.Name.Substring(idx, searchName.Length);
+                                    var post = item.Name[(idx + searchName.Length)..];
+                                    <span class="product-name">@pre<mark>@match</mark>@post</span>
+                                }
+                                else
+                                {
+                                    <span class="product-name">@item.Name</span>
+                                }
+                            </td>
+                            <td><span class="product-desc">@item.Description</span></td>
+                            <td class="text-end price-cell">@item.Price.ToString("N0")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        @* ── Empty State ── *@
+        <div class="product-table-wrapper">
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h5>Không tìm thấy sản phẩm nào</h5>
+                <p class="text-muted">Thử thay đổi từ khóa hoặc điều chỉnh khoảng giá.</p>
+                <a asp-action="Search" class="btn btn-outline-primary mt-2">Xóa bộ lọc</a>
+            </div>
+        </div>
+    }
+</div>
+
+@* Bootstrap Icons CDN *@
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+@section Scripts {
+    @* Client-side validation với jQuery Validate *@
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Client-side: tự động validate MaxPrice >= MinPrice trước khi submit
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const min = parseFloat(document.getElementById('MinPrice')?.value);
+            const max = parseFloat(document.getElementById('MaxPrice')?.value);
+            if (!isNaN(min) && !isNaN(max) && max < min) {
+                e.preventDefault();
+                alert('⚠ Giá đến phải lớn hơn hoặc bằng Giá từ!');
+            }
+        });
+    </script>
+}

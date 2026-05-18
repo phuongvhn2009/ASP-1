@@ -1,0 +1,64 @@
+﻿@model OrderFilterModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Lọc đơn hàng</h1>
+
+<form method="get" asp-action="Index">
+    <div asp-validation-summary="All"></div>
+    <div class="row">
+        <div class="col">
+            <label asp-for="StartDate"></label>
+            <input type="date" asp-for="StartDate" class="form-control" />
+        </div>
+        <div class="col">
+            <label asp-for="EndDate"></label>
+            <input type="date" asp-for="EndDate" class="form-control" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="Status"></label>
+            <select asp-for="Status"
+                    class="form-control"
+                    asp-items="@(new SelectList(ViewBag.Statuses))">
+                <option value="">-- Chọn trạng thái --</option>
+            </select>
+        </div>
+        <div class="col d-flex align-items-end">
+            <button type="submit" class="btn btn-success">Lọc</button>
+        </div>
+    </div>
+</form>
+
+@if (ViewBag.Orders != null && ViewBag.Orders.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Tên khách hàng</th>
+                <th>Ngày đặt hàng</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in ViewBag.Orders)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.CustomerName</td>
+                    <td>@order.OrderDate.ToString("dd-MM-yyyy")</td>
+                    <td>@order.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Không có đơn hàng nào.</p>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
