@@ -1,0 +1,29 @@
+﻿@model List<Product>
+
+<h2>Danh sách sản phẩm</h2>
+
+<a href="/Product/Create" class="btn btn-success mb-3">Thêm mới</a>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Tên</th>
+        <th>Giá</th>
+        <th>Ảnh</th>
+        <th>Danh mục</th>
+        <th>Hành động</th>
+    </tr>
+
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.ProductName</td>
+            <td>$@p.Price</td>
+            <td><img src="@p.ImageUrl" width="80" /></td>
+            <td>@p.Category?.CategoryName</td>
+            <td>
+                <a href="/Product/Edit/@p.ProductId" class="btn btn-warning btn-sm">Sửa</a>
+                <a href="/Product/Delete/@p.ProductId" class="btn btn-danger btn-sm">Xóa</a>
+            </td>
+        </tr>
+    }
+</table>

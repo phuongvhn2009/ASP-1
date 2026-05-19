@@ -1,0 +1,23 @@
+﻿@model Product
+@{
+    var categories = ViewBag.Categories as List<Category>;
+}
+
+<h2>Thêm sản phẩm</h2>
+
+<form method="post">
+    <input name="ProductName" placeholder="Tên" class="form-control mb-2" />
+    <input name="Price" placeholder="Giá" class="form-control mb-2" />
+    <input name="Quantity" placeholder="Số lượng" class="form-control mb-2" />
+    <input name="ImageUrl" placeholder="Link ảnh" class="form-control mb-2" />
+    <textarea name="Description" placeholder="Mô tả" class="form-control mb-2"></textarea>
+
+    <select name="CategoryId" class="form-control mb-2">
+        @foreach (var c in categories)
+        {
+            <option value="@c.CategoryId">@c.CategoryName</option>
+        }
+    </select>
+
+    <button class="btn btn-success">Thêm</button>
+</form>

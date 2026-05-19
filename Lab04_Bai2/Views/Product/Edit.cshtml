@@ -1,0 +1,42 @@
+﻿@model Product
+@{
+    var categories = ViewBag.Categories as List<Category>;
+}
+
+<h2>Sửa sản phẩm</h2>
+
+<form method="post">
+
+    <input type="hidden" asp-for="ProductId" />
+
+    <div class="mb-2">
+        <input asp-for="ProductName" class="form-control" placeholder="Tên sản phẩm" />
+    </div>
+
+    <div class="mb-2">
+        <input asp-for="Price" class="form-control" placeholder="Giá" />
+    </div>
+
+    <div class="mb-2">
+        <input asp-for="Quantity" class="form-control" placeholder="Số lượng" />
+    </div>
+
+    <div class="mb-2">
+        <input asp-for="ImageUrl" class="form-control" placeholder="Link ảnh" />
+    </div>
+
+    <div class="mb-2">
+        <textarea asp-for="Description" class="form-control" placeholder="Mô tả"></textarea>
+    </div>
+
+    <!-- SELECT CATEGORY (ĐÃ FIX) -->
+    <div class="mb-2">
+        <select asp-for="CategoryId"
+                asp-items="@(new SelectList(categories, "CategoryId", "CategoryName"))"
+                class="form-control">
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+
+</form>
