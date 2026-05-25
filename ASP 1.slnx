@@ -9,6 +9,9 @@
   <Project Path="Lab03_Bai4/Lab03_Bai4.csproj" Id="718eb6ac-9297-478b-8395-5a159bd6288e" />
   <Project Path="Lab04_Bai1/Lab04_Bai1.csproj" Id="6f76a6ff-0790-42a7-a547-882b31eb40e4" />
   <Project Path="Lab04_Bai2/Lab04_Bai2.csproj" Id="8f4958f2-fd59-4118-9d73-a7bb4652e48d" />
+  <Project Path="Lab05_Bai1/Lab05_Bai1.csproj" Id="bfa5c1f5-de15-4305-957a-392f010a705e" />
+  <Project Path="Lab05_bai2/Lab05_bai2.csproj" Id="b72b29a6-1d62-4565-9584-0d2b8a9f5190" />
+  <Project Path="Lab05_Bai3/Lab05_Bai3.csproj" Id="d6a6dfcd-9ab7-499e-b26e-3f65d32cd4e3" />
   <Project Path="Lab2/Lab2/Lab02_Bai3.csproj" />
   <Project Path="Lab3_Bai3/Lab03_Bai3.csproj" Id="89873891-848c-43de-ba74-0962b2a1526b" />
 </Solution>

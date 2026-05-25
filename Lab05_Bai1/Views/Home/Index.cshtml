@@ -1,0 +1,21 @@
+﻿@model List<Information>
+<h1>Information List</h1>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>License</th>
+        <th>Established</th>
+        <th>Revenue</th>
+    </tr>
+    <tbody>
+    @foreach (var info in Model)
+    {
+        <tr>
+            <td>@info.Name</td>
+            <td>@info.License</td>
+            <td>@info.Established.ToString("yyyy-MM-dd")</td>
+            <td>@info.Revenue.ToString("C")</td>
+        </tr>
+    }
+    </tbody>
+</table>

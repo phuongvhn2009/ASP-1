@@ -1,0 +1,14 @@
+@model List<Department>
+<h1>Departments</h1>
+<ol>
+    @foreach (var department in Model)
+    {
+        <li>@department.Name</li>
+        <ol>
+            @foreach (var employee in department.Employees)
+            {
+                <li>@employee.Name</li>
+            }
+        </ol>
+    }
+</ol>
