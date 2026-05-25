@@ -22,5 +22,5 @@ public class Product
     public int? Quantity { get; set; }
 
     [Display(Name = "Trạng thái")]
-    public bool? Status { get; set; }
+    public bool Status { get; set; } = true;
 }

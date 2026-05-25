@@ -1,14 +1,42 @@
 @model List<Department>
-<h1>Departments</h1>
-<ol>
-    @foreach (var department in Model)
+
+<div class="container py-3">
+    <h1 class="mb-4">Danh Sách Phòng Ban & Nhân Viên</h1>
+    
+    @if (!Model.Any())
     {
-        <li>@department.Name</li>
-        <ol>
-            @foreach (var employee in department.Employees)
-            {
-                <li>@employee.Name</li>
-            }
-        </ol>
+        <p class="text-muted">Chưa có phòng ban nào để hiển thị.</p>
     }
-</ol>
+    else
+    {
+        <ul class="dept-list">
+            @foreach (var department in Model)
+            {
+                <li class="dept-item">
+                    <div class="dept-name">
+                        <span>@department.Name</span>
+                        <span class="badge bg-primary rounded-pill" style="font-size: 0.75rem;">
+                            @(department.Employees?.Count ?? 0) nhân viên
+                        </span>
+                    </div>
+                    <ul class="emp-list">
+                        @if (department.Employees == null || !department.Employees.Any())
+                        {
+                            <li class="text-muted small py-2">Không có nhân viên</li>
+                        }
+                        else
+                        {
+                            foreach (var employee in department.Employees)
+                            {
+                                <li class="emp-item">
+                                    <span class="emp-name">@employee.Name</span>
+                                    <span class="emp-designation">@employee.Designation</span>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    }
+</div>
