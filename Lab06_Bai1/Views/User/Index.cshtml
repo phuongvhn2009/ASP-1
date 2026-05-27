@@ -1,0 +1,20 @@
+@model List<string>
+@{
+    ViewData["Title"] = "Danh sách người dùng";
+}
+
+<h2>Danh sách người dùng</h2>
+
+<a asp-action="Create" class="btn btn-primary">
+    Thêm người dùng
+</a>
+
+<hr />
+
+<ul class="list-group">
+    @foreach (var user in Model)
+    {
+        <li class="list-group-item">@user</li>
+    }
+</ul>
+

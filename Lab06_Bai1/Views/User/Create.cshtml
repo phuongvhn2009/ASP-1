@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Thêm người dùng";
+}
+<h2>Thêm người dùng</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label class="form-label">Tên người dùng</label>
+        <input type="text" name="userName" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Thêm</button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Quay lại
+    </a>
+</form>
