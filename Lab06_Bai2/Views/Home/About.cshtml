@@ -1,0 +1,18 @@
+<h1>About</h1>
+<p>Lấy thông tin từ Session (String):</p>
+<p>Name: @ViewBag.Name</p>
+<p>Email: @ViewBag.Email</p>
+
+<hr />
+
+<p>Lấy thông tin từ Session (Object):</p>
+@if (ViewBag.User != null)
+{
+    <p>User Name: @ViewBag.User.Name</p>
+    <p>User Email: @ViewBag.User.Email</p>
+}
+else
+{
+    <p>Không tìm thấy đối tượng User trong Session.</p>
+}
+
